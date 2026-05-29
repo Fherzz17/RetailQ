@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RetailIQ</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">RIQ</div>
+          <div>
+            <strong>RetailIQ</strong>
+            <span>Inventory intelligence</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="#overview" class="active">Overview</a>
+          <a href="#products">Products</a>
+          <a href="#forecast">Forecast</a>
+          <a href="#actions">Actions</a>
+        </nav>
+        <div class="sidebar-card">
+          <span class="eyebrow">Demo Status</span>
+          <p id="systemStatus">Connecting to API...</p>
+          <button id="refreshDemoBtn" class="secondary-btn">Refresh demo data</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="hero" id="overview">
+          <div>
+            <span class="eyebrow">Live Retail Dashboard</span>
+            <h1>Sales, stock, and risk signals in one clean view.</h1>
+            <p>RetailIQ connects Python, SQL, FastAPI, and a real frontend into a demo that feels like a product a small shop could use.</p>
+          </div>
+          <div class="hero-panel">
+            <span>Stock Risk</span>
+            <strong id="heroRisk">Loading</strong>
+            <small>Products needing attention soon</small>
+          </div>
+        </section>
+
+        <section class="metrics-grid" aria-label="Business metrics">
+          <article class="metric">
+            <span>Total revenue</span>
+            <strong id="totalRevenue">--</strong>
+          </article>
+          <article class="metric">
+            <span>Units sold</span>
+            <strong id="unitsSold">--</strong>
+          </article>
+          <article class="metric">
+            <span>Orders</span>
+            <strong id="orders">--</strong>
+          </article>
+          <article class="metric warning">
+            <span>Low stock</span>
+            <strong id="lowStockCount">--</strong>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="panel wide">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Revenue</span>
+                <h2>Monthly trend</h2>
+              </div>
+            </div>
+            <div id="revenueChart" class="bar-chart"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Winners</span>
+                <h2>Top products</h2>
+              </div>
+            </div>
+            <div id="topProducts" class="stack-list"></div>
+          </article>
+        </section>
+
+        <section class="panel" id="products">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">Inventory</span>
+              <h2>Product catalog</h2>
+            </div>
+            <input id="productSearch" class="search-input" type="search" placeholder="Search products">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="productsTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="content-grid" id="forecast">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Forecast</span>
+                <h2>Stock risk</h2>
+              </div>
+            </div>
+            <div id="forecastList" class="stack-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Alerts</span>
+                <h2>Low-stock products</h2>
+              </div>
+            </div>
+            <div id="lowStockList" class="stack-list"></div>
+          </article>
+        </section>
+
+        <section class="forms-grid" id="actions">
+          <form id="productForm" class="panel form-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Action</span>
+                <h2>Add product</h2>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label>SKU<input name="sku" required placeholder="COFF-250"></label>
+              <label>Name<input name="name" required placeholder="Coffee 250g"></label>
+              <label>Category<input name="category" required placeholder="Beverages"></label>
+              <label>Unit price<input name="unit_price" required type="number" min="1" step="0.01"></label>
+              <label>Cost price<input name="cost_price" required type="number" min="1" step="0.01"></label>
+              <label>Current stock<input name="current_stock" required type="number" min="0" value="10"></label>
+              <label>Reorder level<input name="reorder_level" required type="number" min="0" value="5"></label>
+              <label>Supplier<select name="supplier_id" id="supplierSelect"></select></label>
+            </div>
+            <button type="submit">Add product</button>
+            <p class="form-message" id="productMessage"></p>
+          </form>
+
+          <form id="saleForm" class="panel form-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="eyebrow">Action</span>
+                <h2>Record sale</h2>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label>Product<select name="product_id" id="saleProductSelect" required></select></label>
+              <label>Customer<select name="customer_id" id="customerSelect"></select></label>
+              <label>Date<input name="sale_date" id="saleDate" required type="date"></label>
+              <label>Quantity<input name="quantity" required type="number" min="1" value="1"></label>
+              <label>Unit price<input name="unit_price" id="saleUnitPrice" required type="number" min="1" step="0.01"></label>
+            </div>
+            <button type="submit">Record sale</button>
+            <p class="form-message" id="saleMessage"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
